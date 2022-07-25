@@ -42,9 +42,9 @@ print_r(Profiler::getStatTime());
 /*
 Array
 (
-    [first] => 0.10135746002197
     [second] => 0.2015209197998
     [third] => 0.20024418830872
+    [first] => 0.10135746002197
 )
 */
 

@@ -76,7 +76,9 @@ class Profiler
     public static function getStatTime(): array
     {
         uasort(static::$statTime, function($lhs, $rhs) {
-            return $rhs-$lhs;
+            if($rhs > $lhs) return 1;
+            if($lhs < $rhs) return -1;
+            return 0;
         });
         return static::$statTime;
     }

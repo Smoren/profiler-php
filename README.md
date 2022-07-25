@@ -34,21 +34,27 @@ for($i=0; $i<10; ++$i) {
     someTask();
 }
 
+Profiler::profile('third', function() {
+    usleep(30000);
+});
+
 print_r(Profiler::getStatTime());
 /*
- Array
+Array
 (
-    [first] => 0.10141491889954
-    [second] => 0.20137596130371
+    [first] => 0.10135746002197
+    [second] => 0.2015209197998
+    [third] => 0.20024418830872
 )
 */
 
 print_r(Profiler::getStatCalls());
 /*
- Array
+Array
 (
     [first] => 10
     [second] => 10
+    [third] => 1
 )
 */
 ```

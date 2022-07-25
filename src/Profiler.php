@@ -59,6 +59,18 @@ class Profiler
     }
 
     /**
+     * @param string $name
+     * @param callable $callback
+     * @throws ProfilerException
+     */
+    public static function profile(string $name, callable $callback): void
+    {
+        static::start($name);
+        $callback();
+        static::stop($name);
+    }
+
+    /**
      * @return array
      */
     public static function getStatTime(): array
@@ -78,5 +90,15 @@ class Profiler
             return $rhs-$lhs;
         });
         return static::$statCalls;
+    }
+
+    /**
+     * Clears all stat
+     */
+    public static function clear(): void
+    {
+        static::$process = [];
+        static::$statTime = [];
+        static::$statCalls = [];
     }
 }

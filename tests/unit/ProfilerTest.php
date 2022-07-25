@@ -12,12 +12,16 @@ class ProfilerTest extends \Codeception\Test\Unit
             $this->someTask();
         }
 
+        Profiler::profile('first', function() {
+            usleep(200000);
+        });
+
         $statTime = Profiler::getStatTime();
-        $this->assertEquals(0.1, round($statTime['first'], 1));
+        $this->assertEquals(0.3, round($statTime['first'], 1));
         $this->assertEquals(0.2, round($statTime['second'], 1));
 
         $statCalls = Profiler::getStatCalls();
-        $this->assertEquals(10, $statCalls['first']);
+        $this->assertEquals(11, $statCalls['first']);
         $this->assertEquals(10, $statCalls['second']);
     }
 

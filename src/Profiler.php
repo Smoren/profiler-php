@@ -63,6 +63,9 @@ class Profiler
      */
     public static function getStatTime(): array
     {
+        uasort(static::$statTime, function($lhs, $rhs) {
+            return $rhs-$lhs;
+        });
         return static::$statTime;
     }
 
@@ -71,6 +74,9 @@ class Profiler
      */
     public static function getStatCalls(): array
     {
+        uasort(static::$statCalls, function($lhs, $rhs) {
+            return $rhs-$lhs;
+        });
         return static::$statCalls;
     }
 }

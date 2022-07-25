@@ -10,7 +10,8 @@ namespace Smoren\Profiler;
 class Profiler
 {
     protected static $process = [];
-    protected static $stat = [];
+    protected static $statTime = [];
+    protected static $statCalls = [];
 
     /**
      * @param string $name
@@ -27,6 +28,12 @@ class Profiler
             );
         }
         static::$process[$name] = microtime(true);
+
+        if(!isset(static::$statCalls[$name])) {
+            static::$statCalls[$name] = 0;
+        }
+
+        static::$statCalls[$name]++;
     }
 
     /**
@@ -44,23 +51,26 @@ class Profiler
             );
         }
 
-        if(!isset(static::$stat[$name])) {
-            static::$stat[$name] = 0;
+        if(!isset(static::$statTime[$name])) {
+            static::$statTime[$name] = 0;
         }
-        static::$stat[$name] += microtime(true) - static::$process[$name];
+        static::$statTime[$name] += microtime(true) - static::$process[$name];
         unset(static::$process[$name]);
     }
 
     /**
      * @return array
      */
-    public static function getStat(): array
+    public static function getStatTime(): array
     {
-        return static::$stat;
+        return static::$statTime;
     }
 
-    public static function printStat(): void
+    /**
+     * @return array
+     */
+    public static function getStatCalls(): array
     {
-        print_r(static::$stat);
+        return static::$statCalls;
     }
 }

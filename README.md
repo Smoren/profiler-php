@@ -34,12 +34,21 @@ for($i=0; $i<10; ++$i) {
     someTask();
 }
 
-print_r(Profiler::getStat());
+print_r(Profiler::getStatTime());
 /*
  Array
 (
     [first] => 0.10141491889954
     [second] => 0.20137596130371
+)
+*/
+
+print_r(Profiler::getStatCalls());
+/*
+ Array
+(
+    [first] => 10
+    [second] => 10
 )
 */
 ```

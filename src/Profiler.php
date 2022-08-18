@@ -1,25 +1,33 @@
 <?php
 
-
 namespace Smoren\Profiler;
-
 
 /**
  * Profiler helper
  */
 class Profiler
 {
-    protected static $process = [];
-    protected static $statTime = [];
-    protected static $statCalls = [];
+    /**
+     * @var array<string, float>
+     */
+    protected static $processMap = [];
+    /**
+     * @var array<string, float>
+     */
+    protected static $statTimeMap = [];
+    /**
+     * @var array<string, int>
+     */
+    protected static $statCallsCountMap = [];
 
     /**
-     * @param string $name
+     * Starts the profiling of named process
+     * @param string $name process name
      * @throws ProfilerException
      */
     public static function start(string $name): void
     {
-        if(isset(static::$process[$name])) {
+        if(isset(static::$processMap[$name])) {
             throw new ProfilerException(
                 "process '{$name}' already started",
                 ProfilerException::STATUS_PROCESS_ALREADY_STARTED,
@@ -27,22 +35,23 @@ class Profiler
                 ['name' => $name]
             );
         }
-        static::$process[$name] = microtime(true);
+        static::$processMap[$name] = microtime(true);
 
-        if(!isset(static::$statCalls[$name])) {
-            static::$statCalls[$name] = 0;
+        if(!isset(static::$statCallsCountMap[$name])) {
+            static::$statCallsCountMap[$name] = 0;
         }
 
-        static::$statCalls[$name]++;
+        static::$statCallsCountMap[$name]++;
     }
 
     /**
-     * @param string $name
+     * Stops the profiling of named process
+     * @param string $name process name
      * @throws ProfilerException
      */
     public static function stop(string $name): void
     {
-        if(!isset(static::$process[$name])) {
+        if(!isset(static::$processMap[$name])) {
             throw new ProfilerException(
                 "process '{$name}' not started yet",
                 ProfilerException::STATUS_PROCESS_NOT_STARTED_YET,
@@ -51,16 +60,17 @@ class Profiler
             );
         }
 
-        if(!isset(static::$statTime[$name])) {
-            static::$statTime[$name] = 0;
+        if(!isset(static::$statTimeMap[$name])) {
+            static::$statTimeMap[$name] = 0;
         }
-        static::$statTime[$name] += microtime(true) - static::$process[$name];
-        unset(static::$process[$name]);
+        static::$statTimeMap[$name] += microtime(true) - static::$processMap[$name];
+        unset(static::$processMap[$name]);
     }
 
     /**
-     * @param string $name
-     * @param callable $callback
+     * Profiles the body of callback function
+     * @param string $name process name
+     * @param callable $callback function with body to profile
      * @throws ProfilerException
      */
     public static function profile(string $name, callable $callback): void
@@ -71,27 +81,33 @@ class Profiler
     }
 
     /**
-     * @return array
+     * Returns time usage summary
+     * @return array<string, float>
      */
     public static function getStatTime(): array
     {
-        uasort(static::$statTime, function($lhs, $rhs) {
-            if($rhs > $lhs) return 1;
-            if($lhs < $rhs) return -1;
+        uasort(static::$statTimeMap, function($lhs, $rhs) {
+            if($rhs > $lhs) {
+                return 1;
+            }
+            if($lhs < $rhs) {
+                return -1;
+            }
             return 0;
         });
-        return static::$statTime;
+        return static::$statTimeMap;
     }
 
     /**
-     * @return array
+     * Returns calls counters summary
+     * @return array<string, int>
      */
     public static function getStatCalls(): array
     {
-        uasort(static::$statCalls, function($lhs, $rhs) {
+        uasort(static::$statCallsCountMap, function($lhs, $rhs) {
             return $rhs-$lhs;
         });
-        return static::$statCalls;
+        return static::$statCallsCountMap;
     }
 
     /**
@@ -99,8 +115,8 @@ class Profiler
      */
     public static function clear(): void
     {
-        static::$process = [];
-        static::$statTime = [];
-        static::$statCalls = [];
+        static::$processMap = [];
+        static::$statTimeMap = [];
+        static::$statCallsCountMap = [];
     }
 }

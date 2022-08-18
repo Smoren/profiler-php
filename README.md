@@ -1,5 +1,11 @@
 # profiler
 
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/smoren/profiler)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Smoren/profiler-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Smoren/profiler-php/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Smoren/profiler-php/badge.svg?branch=master)](https://coveralls.io/github/Smoren/profiler-php?branch=master)
+![Build and test](https://github.com/Smoren/profiler-php/actions/workflows/test_master.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Profiler helper
 
 ### How to install to your project
@@ -10,8 +16,8 @@ composer require smoren/profiler
 ### Unit testing
 ```
 composer install
-./vendor/bin/codecept build
-./vendor/bin/codecept run unit tests/unit
+composer test-init
+composer test
 ```
 
 ### Usage

@@ -75,9 +75,12 @@ class Profiler
      */
     public static function profile(string $name, callable $callback): void
     {
-        static::start($name);
-        $callback();
-        static::stop($name);
+        try {
+            static::start($name);
+            $callback();
+        } finally {
+            static::stop($name);
+        }
     }
 
     /**
